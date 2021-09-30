@@ -5,23 +5,40 @@ class SugarWater
     @water = water
     @sugar = sugar
   end
-end
-
-class SugarWaterBuilder
-  def initialize
-    @sugar_water = SugarWater.new(0, 0)
-  end
 
   def add_material(sugar_amount)
-    @sugar_water.sugar += sugar_amount
+    @sugar += sugar_amount
+  end
+end
+
+class SaltWater
+  attr_accessor :water, :salt
+
+  def initialize(water, salt)
+    @water = water
+    @salt = salt
+  end
+
+  def add_material(salt_amount)
+    @salt += salt_amount
+  end
+end
+
+class MaterialWaterBuilder
+  def initialize(material_water_class)
+    @material_water = material_water_class.new(0, 0)
+  end
+
+  def add_material(material_amount)
+    @material_water.add_material(material_amount)
   end
 
   def add_water(water_amount)
-    @sugar_water.water += water_amount
+    @material_water.water += water_amount
   end
 
   def result
-    @sugar_water
+    @material_water
   end
 end
 
@@ -38,40 +55,7 @@ class Director
   end
 end
 
-builder = SugarWaterBuilder.new
-director = Director.new(builder)
-director.cook
-
-p builder.result
-
-class SaltWater
-  attr_accessor :water, :salt
-
-  def initialize(water, salt)
-    @water = water
-    @salt = salt
-  end
-end
-
-class SaltWaterBuilder
-  def initialize
-    @saltwater = SaltWater.new(0, 0)
-  end
-
-  def add_material(material_amount)
-    @saltwater.salt += material_amount
-  end
-
-  def add_water(water_amount)
-    @saltwater.water += water_amount
-  end
-
-  def result
-    @saltwater
-  end
-end
-
-builder = SaltWaterBuilder.new
+builder = MaterialWaterBuilder.new(SaltWater)
 director = Director.new(builder)
 director.cook
 
